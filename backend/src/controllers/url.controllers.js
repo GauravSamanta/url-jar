@@ -3,6 +3,7 @@ import { Url } from "../models/url.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { User } from "../models/user.model.js";
 
 const createUrl = asyncHandler(async (req, res) => {
   const user = req.user;
@@ -13,7 +14,7 @@ const createUrl = asyncHandler(async (req, res) => {
   if (!userLongUrl) {
     return res.json(new ApiError(400, "Url is required"));
   }
-//needs work
+  //needs work
   // const oldShortUrl = await Url.find({
   //   $and: [{ _id: user._id }, { long: userLongUrl }],
   // });
