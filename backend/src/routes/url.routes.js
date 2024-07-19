@@ -5,6 +5,6 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 router.route("/short").post(verifyJWT, createUrl);
-router.route("/getUrls").get(verifyJWT, getAllUrl);
+router.route("/getUrls").post(verifyJWT, getAllUrl);
 
 export default router;

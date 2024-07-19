@@ -6,6 +6,7 @@ import RegisterPage from "./routes/RegisterPage";
 import AuthLayout from "./routes/AuthLayout";
 
 axios.defaults.baseURL = "https://url-jar.vercel.app";
+// axios.defaults.baseURL = "http://localhost:7000";
 axios.defaults.withCredentials = true;
 
 function App() {

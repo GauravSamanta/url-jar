@@ -10,7 +10,6 @@ export default function AuthContext({ children }) {
     const savedUser = localStorage.getItem('user');
     return savedUser ? JSON.parse(savedUser) : null;
   });
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
