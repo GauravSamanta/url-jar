@@ -8,7 +8,10 @@ export default function HomePage() {
     const fetchUrls = async () => {
       try {
         const response = await axios.post("/api/v1/url/getUrls", {
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
         });
 
         if (response) {
