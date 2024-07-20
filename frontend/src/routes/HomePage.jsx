@@ -1,30 +1,14 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import React from 'react'
+import LinkList from './LinkList'
+import CreateLink from './CreateLink'
 
 export default function HomePage() {
-  const [urls, setUrls] = useState([]);
+  return (
+    <div>
+      <LinkList/>
+      <CreateLink/>
 
-  useEffect(() => {
-    const fetchUrls = async () => {
-      try {
-        const response = await axios.post("/api/v1/url/getUrls", {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
 
-        if (response) {
-          setUrls(response.data);
-          console.log(urls);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchUrls();
-  }, []);
-
-  return <div>hello</div>;
+    </div>
+  )
 }

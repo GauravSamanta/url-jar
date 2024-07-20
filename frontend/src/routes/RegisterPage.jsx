@@ -2,7 +2,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { registerSchema } from "../schemas/registerSchema.js";
+import { loginSchema } from "../schemas/loginSchema.js";
+import {
+  Card,
+  Input,
+  Checkbox,
+  Button,
+  Typography,
+} from "@material-tailwind/react";
 
 export default function RegisterPage() {
   const {
@@ -10,108 +17,104 @@ export default function RegisterPage() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(registerSchema),
+    resolver: yupResolver(loginSchema),
   });
 
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("/api/v1/users/register", data, {
+      const response = await axios.post("/api/v1/users/login", data, {
         headers: { "Content-Type": "application/json" },
       });
 
       console.log(response);
       if (response.data.success) {
-        navigate("/login");
+        navigate("/");
       } else {
-        throw new Error("Registration failed");
+        throw new Error("Login failed");
       }
     } catch (error) {
-      console.error("Error registering user:", error);
+      console.error("Error Login user:", error);
       // Handle error, show error message, etc.
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="grid gap-6 mb-6 md:grid-cols-2">
-        <div>
-          <label
-            htmlFor="username"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Username
-          </label>
-          <input
-            type="text"
-            id="username"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="John"
-            required
-            {...register("username")}
+    <div className="flex justify-center ">
+      <Card color="transparent" shadow={true} className="max-w-[40rem] items-center p-10">
+        <Typography variant="h4" color="blue-gray">
+          Sign Up
+        </Typography>
+        <Typography color="gray" className="mt-1 font-normal">
+          Nice to meet you! Enter your details to register.
+        </Typography>
+        <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+          <div className="mb-1 flex flex-col gap-6">
+            <Typography variant="h6" color="blue-gray" className="-mb-3">
+              Your Name
+            </Typography>
+            <Input
+              size="lg"
+              placeholder="name@mail.com"
+              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              labelProps={{
+                className: "before:content-none after:content-none",
+              }}
+            />
+            <Typography variant="h6" color="blue-gray" className="-mb-3">
+              Your Email
+            </Typography>
+            <Input
+              size="lg"
+              placeholder="name@mail.com"
+              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              labelProps={{
+                className: "before:content-none after:content-none",
+              }}
+            />
+            <Typography variant="h6" color="blue-gray" className="-mb-3">
+              Password
+            </Typography>
+            <Input
+              type="password"
+              size="lg"
+              placeholder="********"
+              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              labelProps={{
+                className: "before:content-none after:content-none",
+              }}
+            />
+          </div>
+          <Checkbox
+            label={
+              <Typography
+                variant="small"
+                color="gray"
+                className="flex items-center font-normal"
+              >
+                I agree the
+                <a
+                  href="#"
+                  className="font-medium transition-colors hover:text-gray-900"
+                >
+                  &nbsp;Terms and Conditions
+                </a>
+              </Typography>
+            }
+            containerProps={{ className: "-ml-2.5" }}
           />
-          {errors.username && <p>{errors.username.message}</p>}
-        </div>
-        <div>
-          <label
-            htmlFor="Fullname"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Fullname
-          </label>
-          <input
-            type="text"
-            id="Fullname"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Doe"
-            required
-            {...register("fullName")}
-          />
-          {errors.fullname && <p>{errors.fullname.message}</p>}
-        </div>
-      </div>
-      <div className="mb-6">
-        <label
-          htmlFor="email"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        >
-          Email address
-        </label>
-        <input
-          type="email"
-          id="email"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="john.doe@company.com"
-          required
-          {...register("email")}
-        />
-        {errors.email && <p>{errors.email.message}</p>}
-      </div>
-      <div className="mb-6">
-        <label
-          htmlFor="password"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        >
-          Password
-        </label>
-        <input
-          type="password"
-          id="password"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="•••••••••"
-          required
-          {...register("password")}
-        />
-        {errors.password && <p>{errors.password.message}</p>}
-      </div>
-
-      <button
-        type="submit"
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      >
-        Submit
-      </button>
-    </form>
+          <Button className="mt-6" fullWidth>
+            sign up
+          </Button>
+          <Typography color="gray" className="mt-4 text-center font-normal">
+            Already have an account?{" "}
+            <a href="#" className="font-medium text-gray-900">
+              Sign In
+            </a>
+          </Typography>
+        </form>
+      </Card>
+    </div>
   );
 }

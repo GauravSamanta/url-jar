@@ -3,7 +3,6 @@ import { Url } from "../models/url.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { User } from "../models/user.model.js";
 
 const createUrl = asyncHandler(async (req, res) => {
   const user = req.user;
@@ -45,7 +44,7 @@ const createUrl = asyncHandler(async (req, res) => {
 
   const newUrlObject = {
     full: userLongUrl,
-    shortUrl: `https://${req.hostname}/${newShortUrl.short}`,
+    shortUrl: `${req.hostname}/${newShortUrl.short}`,
   };
 
   res.json(new ApiResponse(200, newUrlObject, "Short url created succesfully"));
