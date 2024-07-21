@@ -8,7 +8,10 @@ import {
   Input,
   Button,
   Typography,
+  Spinner,
 } from "@material-tailwind/react";
+import { useContext, useState } from "react";
+import { UserContext } from "../utils/AuthContext.jsx";
 
 export default function RegisterPage() {
   const {
@@ -18,17 +21,21 @@ export default function RegisterPage() {
   } = useForm({
     resolver: yupResolver(loginSchema),
   });
+  const { user } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
+      setIsLoading(true);
       const response = await axios.post("/api/v1/users/login", data, {
         headers: { "Content-Type": "application/json" },
       });
 
       console.log(response);
       if (response.data.success) {
+        console.log(user);
         navigate("/");
       } else {
         throw new Error("Login failed");
@@ -38,6 +45,13 @@ export default function RegisterPage() {
       // Handle error, show error message, etc.
     }
   };
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[70vh]">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center ">

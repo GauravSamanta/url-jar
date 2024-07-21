@@ -59,6 +59,7 @@ const getAllUrl = asyncHandler(async (req, res) => {
   const allUrlPairs = await Url.find({
     owner: user._id,
   });
+
   if (!allUrlPairs) {
     return res.json(new ApiError(400, "No urls found"));
   }

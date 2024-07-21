@@ -16,6 +16,7 @@ export default function CreateLink() {
 
   const [url, setUrl] = useState("https://url-jar-home.vercel.app/"); // Initialize with an empty string
   const [isLoading, setIsLoading] = useState(false);
+  const [buttonText, setButtonText] = useState("Copy");
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
@@ -25,8 +26,8 @@ export default function CreateLink() {
       if (response.data) {
         setIsLoading(false);
         setUrl(response.data.data.shortUrl);
-        const element=document.getElementById("shorten")
-        document.value=url
+        const element = document.getElementById("shorten");
+        document.value = url;
         console.log(element);
         console.log(url);
       }
@@ -61,6 +62,7 @@ export default function CreateLink() {
             fullWidth
             type="submit"
             disabled={isLoading}
+            onClick={()=>setButtonText("Copy")}
           >
             {isLoading ? "Shortening..." : "Shorten"}
           </Button>
@@ -75,16 +77,19 @@ export default function CreateLink() {
           size="lg"
           id="shorten"
           className="!border-t-blue-gray-200 focus:!border-t-gray-900 basis-2/3"
-         value={url}
-         readOnly
+          value={url}
+          readOnly
         />
         <Button
           className="basis-1/3"
           fullWidth
           type="button"
-          onClick={() => navigator.clipboard.writeText(url)}
+          onClick={() => {
+            navigator.clipboard.writeText(url);
+            setButtonText("Copied!");
+          }}
         >
-          Copy
+          {buttonText}
         </Button>
       </div>
     </Card>

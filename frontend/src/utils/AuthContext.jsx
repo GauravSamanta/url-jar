@@ -6,10 +6,8 @@ export const UserContext = createContext({});
 
 export default function AuthContext({ children }) {
   // Initialize state from localStorage
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  const [user, setUser] = useState({});
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -17,10 +15,9 @@ export default function AuthContext({ children }) {
           headers: { "Content-Type": "application/json" },
         });
 
-        if (response) {
-          setUser(response.data);
-          console.log(user);
-          localStorage.setItem('user', JSON.stringify(response.data)); // Save user to localStorage
+        if (response.data && response.data.data.user._id) {
+          setUser(response.data.data.user._id);
+          localStorage.setItem("user", response.data.data.user._id); // Save user to localStorage
         }
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -31,16 +28,7 @@ export default function AuthContext({ children }) {
     if (!user) {
       fetchUser();
     }
-  }, [user]);
-
-  useEffect(() => {
-    // Update localStorage whenever the user state changes
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('user');
-    }
-  }, [user]);
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

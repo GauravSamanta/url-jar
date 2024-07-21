@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Navbar,
   Collapse,
@@ -7,7 +7,9 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserContext } from "../utils/AuthContext";
 function NavList() {
   return (
     <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -17,12 +19,12 @@ function NavList() {
         color="blue-gray"
         className="p-1 font-medium"
       >
-        <a
-          href="#"
-          className="flex items-center hover:text-blue-500 transition-colors"
+        <Link
+          to="/"
+          className="flex items-center hover:text-black transition-colors"
         >
-          Pages
-        </a>
+          Home
+        </Link>
       </Typography>
       <Typography
         as="li"
@@ -30,12 +32,12 @@ function NavList() {
         color="blue-gray"
         className="p-1 font-medium"
       >
-        <a
-          href="#"
-          className="flex items-center hover:text-blue-500 transition-colors"
+        <Link
+          to="/"
+          className="flex items-center hover:text-black transition-colors"
         >
           Account
-        </a>
+        </Link>
       </Typography>
       <Typography
         as="li"
@@ -43,12 +45,12 @@ function NavList() {
         color="blue-gray"
         className="p-1 font-medium"
       >
-        <a
-          href="#"
-          className="flex items-center hover:text-blue-500 transition-colors"
+        <Link
+          to="/about"
+          className="flex items-center hover:text-black transition-colors"
         >
-          Blocks
-        </a>
+          About
+        </Link>
       </Typography>
       <Typography
         as="li"
@@ -56,12 +58,12 @@ function NavList() {
         color="blue-gray"
         className="p-1 font-medium"
       >
-        <a
-          href="#"
-          className="flex items-center hover:text-blue-500 transition-colors"
+        <Link
+          to="https://github.com/GauravSamanta/url-jar"
+          className="flex items-center hover:text-black transition-colors"
         >
-          Docs
-        </a>
+          source code
+        </Link>
       </Typography>
     </ul>
   );
@@ -69,7 +71,7 @@ function NavList() {
 
 export default function NavbarSimple() {
   const [openNav, setOpenNav] = React.useState(false);
-
+  const { user, setUser } = useContext(UserContext);
   const handleWindowResize = () =>
     window.innerWidth >= 960 && setOpenNav(false);
 
@@ -81,9 +83,32 @@ export default function NavbarSimple() {
     };
   }, []);
 
+  const navigate = useNavigate();
+  const handleLogOut = async () => {
+    try {
+      const response = await axios.post(
+        "/api/v1/users/logout",
+        {},
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      localStorage.clear();
+      setUser(null);
+      console.log(response);
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
-      <Navbar className="mx-auto max-w-screen-xl px-6 py-3 mb-10 border-2" color="gray" shadow={true}  >
+      <Navbar
+        className="mx-auto max-w-screen-xl px-6 py-3 mb-10 border-2"
+        color="gray"
+        shadow={true}
+      >
         <div className="flex items-center justify-between text-blue-gray-900">
           <Typography
             as="a"
@@ -97,12 +122,26 @@ export default function NavbarSimple() {
             <NavList />
           </div>
           <div className="hidden gap-2 lg:flex">
-            <Button variant="text" size="sm" color="blue-gray">
-              <Link to="/login">Log In</Link>
-            </Button>
-            <Button variant="gradient" size="sm">
-              <Link to="/register">Register</Link>
-            </Button>
+            <Link to="/login">
+              <Button variant="gradient" size="sm">
+                Log In
+              </Button>
+            </Link>
+            <Link to="/register">
+              <Button variant="gradient" size="sm">
+                Register
+              </Button>
+            </Link>
+            <Link>
+              <Button
+                variant="gradient"
+                size="sm"
+                fullWidth
+                onClick={handleLogOut}
+              >
+                logout
+              </Button>
+            </Link>
           </div>
           <IconButton
             variant="text"
@@ -120,12 +159,27 @@ export default function NavbarSimple() {
         <Collapse open={openNav}>
           <NavList />
           <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
-            <Button variant="outlined" size="sm" color="blue-gray" fullWidth>
-              Log In
-            </Button>
-            <Button variant="gradient" size="sm" fullWidth>
-              <Link to="/register">Register</Link>
-            </Button>
+            <Link to="/login">
+              <Button variant="gradient" size="sm" fullWidth>
+                Log In
+              </Button>
+            </Link>
+            <Link to="/register">
+              <Button variant="gradient" size="sm" fullWidth>
+                Register
+              </Button>
+            </Link>
+
+            <Link>
+              <Button
+                variant="gradient"
+                size="sm"
+                fullWidth
+                onClick={handleLogOut}
+              >
+                Logout
+              </Button>
+            </Link>
           </div>
         </Collapse>
       </Navbar>
